@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title class="absolute-center">
-          Universal Taks Manager App
+          Universal Task Manager App
         </q-toolbar-title>
       </q-toolbar>
     </q-header>

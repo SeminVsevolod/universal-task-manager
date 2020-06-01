@@ -9,3 +9,8 @@ export default {
   name: 'App',
 };
 </script>
+<style>
+  .task-strikethrough {
+    text-decoration: line-through;
+  }
+</style>
