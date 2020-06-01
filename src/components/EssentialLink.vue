@@ -3,10 +3,12 @@
     clickable
     exact
     tag="a"
-    :to="to">
+    :to="to"
+  >
     <q-item-section
       v-if="icon"
-      avatar>
+      avatar
+    >
       <q-icon :name="icon" />
     </q-item-section>
 
