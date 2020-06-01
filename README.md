@@ -17,6 +17,11 @@ quasar dev
 yarn run lint
 ```
 
+### Fix files using eslint
+```bash
+yarn run lint:fix
+```
+
 ### Build the app for production
 ```bash
 quasar build
