@@ -1,7 +1,7 @@
 <template>
   <q-card>
     <modal-header>
-      Add Task
+      Edit Task
     </modal-header>
 
     <!-- QForm automatically validate fields with validation rules when a submit button pressed -->
@@ -32,22 +32,33 @@ export default {
     ModalDueTime: () => import('components/Modals/Shared/ModalDueTime.vue'),
     ModalButtons: () => import('components/Modals/Shared/ModalButtons.vue'),
   },
+  props: {
+    task: {
+      type: Object,
+      required: true,
+    },
+    id: {
+      type: [Number, String],
+      required: true,
+    },
+  },
   data() {
     return {
-      taskToSubmit: {
-        name: '',
-        dueDate: '',
-        dueTime: '',
-        completed: false,
-      },
+      taskToSubmit: {},
     };
+  },
+  mounted() {
+    this.taskToSubmit = { ...this.task };
   },
   methods: {
     ...mapActions('tasks', [
-      'addTask',
+      'updateTask',
     ]),
     submitForm() {
-      this.addTask(this.taskToSubmit);
+      this.updateTask({
+        id: this.id,
+        updates: this.taskToSubmit,
+      });
       this.$emit('close');
     },
   },

@@ -45,18 +45,28 @@
     </q-item-section>
 
     <q-item-section side>
-      <q-btn
-        flat
-        round
-        dense
-        color="negative"
-        icon="delete"
-        @click.stop="promptToDelete(id)"
-      />
+      <div class="row items-center">
+        <q-btn
+          flat
+          round
+          dense
+          color="primary"
+          icon="edit"
+          @click.stop="showEditTask = true"
+        />
+        <q-btn
+          flat
+          round
+          dense
+          color="negative"
+          icon="delete"
+          @click.stop="promptToDelete(id)"
+        />
+      </div>
     </q-item-section>
 
     <q-dialog
-      v-model="showCofirmToDelete"
+      v-model="showConfirmToDelete"
       persistent
     >
       <q-card style="width: 300px">
@@ -81,6 +91,14 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+
+    <q-dialog v-model="showEditTask">
+      <edit-task
+        :id="id"
+        :task="task"
+        @close="showEditTask = false"
+      />
+    </q-dialog>
   </q-item>
 </template>
 
@@ -89,6 +107,9 @@ import { mapActions } from 'vuex';
 
 export default {
   name: 'Task',
+  components: {
+    EditTask: () => import('components/Modals/EditTask.vue'),
+  },
   props: {
     task: {
       type: Object,
@@ -101,7 +122,8 @@ export default {
   },
   data() {
     return {
-      showCofirmToDelete: false,
+      showConfirmToDelete: false,
+      showEditTask: false,
     };
   },
   methods: {
@@ -110,7 +132,7 @@ export default {
       'deleteTask',
     ]),
     promptToDelete() {
-      this.showCofirmToDelete = true;
+      this.showConfirmToDelete = true;
     },
   },
 };
