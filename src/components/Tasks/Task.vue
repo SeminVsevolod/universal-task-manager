@@ -22,6 +22,7 @@
     </q-item-section>
 
     <q-item-section
+      v-if="task.dueDate"
       side
     >
       <div class="row">
@@ -55,7 +56,7 @@
     </q-item-section>
 
     <q-dialog
-      v-model="confirm"
+      v-model="showCofirmToDelete"
       persistent
     >
       <q-card style="width: 300px">
@@ -100,7 +101,7 @@ export default {
   },
   data() {
     return {
-      confirm: false,
+      showCofirmToDelete: false,
     };
   },
   methods: {
@@ -109,7 +110,7 @@ export default {
       'deleteTask',
     ]),
     promptToDelete() {
-      this.confirm = true;
+      this.showCofirmToDelete = true;
     },
   },
 };
