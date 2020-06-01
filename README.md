@@ -14,12 +14,12 @@ quasar dev
 
 ### Lint the files
 ```bash
-yarn run lint
+yarn lint
 ```
 
 ### Fix files using eslint
 ```bash
-yarn run lint:fix
+yarn lint:fix
 ```
 
 ### Build the app for production
