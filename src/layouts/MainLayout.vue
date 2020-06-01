@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="hHh LpR fFf">
     <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -11,11 +11,9 @@
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
 
-        <q-toolbar-title>
-          Quasar App
+        <q-toolbar-title class="absolute-center">
+          Universal Taks Manager App
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
@@ -25,26 +23,30 @@
           v-for="(link, linkIndex) in essentialLinks"
           :key="linkIndex"
           v-bind="link"
+          :label="link.title"
         />
       </q-tabs>
     </q-footer>
 
     <q-drawer
       v-model="leftDrawerOpen"
+      content-class="bg-primary"
+      :breakpoint="767"
+      :width="250"
       show-if-above
       bordered
-      content-class="bg-grey-1"
     >
-      <q-list>
+      <q-list dark>
         <q-item-label
           header
-          class="text-grey-8"
+          class="text-grey-4"
         >
           Navigation
         </q-item-label>
-        <EssentialLink
+        <nav-link
           v-for="link in essentialLinks"
           :key="link.title"
+          class="text-grey-4"
           v-bind="link"
         />
       </q-list>
@@ -57,13 +59,13 @@
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink';
+import NavLink from 'components/NavLink';
 
 export default {
   name: 'MainLayout',
 
   components: {
-    EssentialLink,
+    NavLink,
   },
 
   data() {
@@ -85,3 +87,16 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+  @media screen and (min-width: 768px) {
+    .q-footer {
+      display: none;
+    }
+  }
+  .q-drawer {
+    .q-router-link--exact-active {
+      color: white!important;
+    }
+  }
+</style>
