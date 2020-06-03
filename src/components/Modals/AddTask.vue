@@ -22,16 +22,11 @@
 
 <script>
 import { mapActions } from 'vuex';
+import mixinAddEditTask from 'src/mixins/mixin-add-edit-task';
 
 export default {
   name: 'AddTask',
-  components: {
-    ModalHeader: () => import('components/Modals/Shared/ModalHeader.vue'),
-    ModalTaskName: () => import('components/Modals/Shared/ModalTaskName.vue'),
-    ModalDueDate: () => import('components/Modals/Shared/ModalDueDate.vue'),
-    ModalDueTime: () => import('components/Modals/Shared/ModalDueTime.vue'),
-    ModalButtons: () => import('components/Modals/Shared/ModalButtons.vue'),
-  },
+  mixins: [mixinAddEditTask],
   data() {
     return {
       taskToSubmit: {
@@ -46,10 +41,6 @@ export default {
     ...mapActions('tasks', [
       'addTask',
     ]),
-    submitForm() {
-      this.addTask(this.taskToSubmit);
-      this.$emit('close');
-    },
   },
 };
 </script>
