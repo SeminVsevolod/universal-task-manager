@@ -22,17 +22,21 @@ const state = {
       dueTime: '16:00',
     },
   },
+  search: '',
 };
 
 const mutations = {
-  updateTask(State, payload) {
-    Object.assign(State.tasks[payload.id], payload.updates);
+  updateTask($state, payload) {
+    Object.assign($state.tasks[payload.id], payload.updates);
   },
-  deleteTask(State, payload) {
-    Vue.delete(State.tasks, payload.id);
+  deleteTask($state, payload) {
+    Vue.delete($state.tasks, payload.id);
   },
-  addTask(State, payload) {
-    Vue.set(State.tasks, payload.id, payload.task);
+  addTask($state, payload) {
+    Vue.set($state.tasks, payload.id, payload.task);
+  },
+  setSearch($state, value) {
+    $state.search = value;
   },
 };
 
@@ -51,23 +55,43 @@ const actions = {
     };
     commit('addTask', payload);
   },
+  setSearch({ commit }, value) {
+    commit('setSearch', value);
+  },
 };
 
 const getters = {
-  tasksTodo: (State) => {
+  tasksFiltered: ($state) => {
+    const tasksFiltered = {};
+    if ($state.search) {
+      Object.keys($state.tasks).forEach((key) => {
+        const task = $state.tasks[key];
+        const taskNameLowerCase = task.name.toLowerCase();
+        const searchLowerCase = $state.search.toLowerCase();
+        if (taskNameLowerCase.includes(searchLowerCase)) {
+          tasksFiltered[key] = task;
+        }
+      });
+      return tasksFiltered;
+    }
+    return $state.tasks;
+  },
+  tasksTodo: ($state, $getters) => {
+    const { tasksFiltered } = $getters;
     const tasks = {};
-    Object.keys(State.tasks).forEach((key) => {
-      const task = State.tasks[key];
+    Object.keys(tasksFiltered).forEach((key) => {
+      const task = tasksFiltered[key];
       if (!task.completed) {
         tasks[key] = task;
       }
     });
     return tasks;
   },
-  tasksCompleted: (State) => {
+  tasksCompleted: ($state, $getters) => {
+    const { tasksFiltered } = $getters;
     const tasks = {};
-    Object.keys(State.tasks).forEach((key) => {
-      const task = State.tasks[key];
+    Object.keys(tasksFiltered).forEach((key) => {
+      const task = tasksFiltered[key];
       if (task.completed) {
         tasks[key] = task;
       }

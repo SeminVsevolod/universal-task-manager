@@ -1,10 +1,17 @@
 <template>
   <q-page class="q-pa-md">
+    <search class="row q-mb-lg" />
+
+    <p v-if="search && !Object.keys(tasksTodo).length && !Object.keys(tasksCompleted).length">
+      No search results
+    </p>
+
     <no-tasks
-      v-if="!Object.keys(tasksTodo).length"
+      v-if="!Object.keys(tasksTodo).length && !search"
     />
+
     <tasks-todo
-      v-else
+      v-if="Object.keys(tasksTodo).length"
       :tasks="tasksTodo"
     >
       <template #banner>
@@ -43,15 +50,16 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
   name: 'PageTodo',
   components: {
     AddTask: () => import('../components/Modals/AddTask.vue'),
     TasksTodo: () => import('../components/Tasks/TasksTodo.vue'),
-    ListHeader: () => import('../components/Shared/ListHeader.vue'),
     NoTasks: () => import('../components/Tasks/NoTasks.vue'),
+    ListHeader: () => import('../components/Shared/ListHeader.vue'),
+    Search: () => import('../components/Shared/Search.vue'),
   },
   data() {
     return {
@@ -60,6 +68,7 @@ export default {
   },
   computed: {
     ...mapGetters('tasks', ['tasksTodo', 'tasksCompleted']),
+    ...mapState('tasks', ['search']),
   },
   mounted() {
     this.$root.$on('showAddTask', () => {
