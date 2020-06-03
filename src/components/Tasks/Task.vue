@@ -1,6 +1,7 @@
 <template>
   <q-item
     v-ripple
+    v-touch-hold:1000.mouse="showEditTaskModal"
     clickable
     :class="!task.completed ? 'bg-orange-1' : 'bg-green-1'"
     @click="updateTask({ id: id, updates: { completed: !task.completed }})"
@@ -52,7 +53,7 @@
           dense
           color="primary"
           icon="edit"
-          @click.stop="showEditTask = true"
+          @click.stop="showEditTaskModal"
         />
         <q-btn
           flat
@@ -131,6 +132,9 @@ export default {
       'updateTask',
       'deleteTask',
     ]),
+    showEditTaskModal() {
+      this.showEditTask = true;
+    },
     promptToDelete() {
       this.showConfirmToDelete = true;
     },
