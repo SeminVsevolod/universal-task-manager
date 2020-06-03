@@ -17,9 +17,10 @@
     </q-item-section>
 
     <q-item-section>
-      <q-item-label :class="{'task-strikethrough': task.completed}">
-        {{ task.name }}
-      </q-item-label>
+      <q-item-label
+        :class="{'task-strikethrough': task.completed}"
+        v-html="$options.filters.searchHighlight(task.name, search)"
+      />
     </q-item-section>
 
     <q-item-section
@@ -104,7 +105,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import { date } from 'quasar';
 
 const { formatDate } = date;
@@ -114,6 +115,13 @@ export default {
   filters: {
     niceDate(value) {
       return formatDate(value, 'DD.MM.YYYY');
+    },
+    searchHighlight(value, search) {
+      if (search) {
+        const searchRegExp = new RegExp(search, 'ig');
+        return value.replace(searchRegExp, (match) => `<span class="bg-yellow-6">${match}</span>`);
+      }
+      return value;
     },
   },
   components: {
@@ -134,6 +142,9 @@ export default {
       showConfirmToDelete: false,
       showEditTask: false,
     };
+  },
+  computed: {
+    ...mapState('tasks', ['search']),
   },
   methods: {
     ...mapActions('tasks', [
