@@ -15,19 +15,12 @@
 </template>
 
 <script>
+import { selectAll } from 'src/directives/directive-select-all';
+
 export default {
   name: 'ModalTaskName',
   directives: {
-    selectAll: {
-      inserted(el) {
-        const input = el.querySelector('.q-field__native');
-        input.addEventListener('focus', () => {
-          if (input.value.length) {
-            input.select();
-          }
-        });
-      },
-    },
+    selectAll,
   },
   props: { name: { type: String, default: '' } },
 };
