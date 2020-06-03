@@ -1,6 +1,7 @@
 <template>
   <div class="row q-mb-sm">
     <q-input
+      v-select-all
       :value="name"
       clearable
       autofocus
@@ -16,6 +17,18 @@
 <script>
 export default {
   name: 'ModalTaskName',
+  directives: {
+    selectAll: {
+      inserted(el) {
+        const input = el.querySelector('.q-field__native');
+        input.addEventListener('focus', () => {
+          if (input.value.length) {
+            input.select();
+          }
+        });
+      },
+    },
+  },
   props: { name: { type: String, default: '' } },
 };
 </script>
