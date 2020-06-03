@@ -1,7 +1,10 @@
 <template>
   <q-page class="q-pa-md">
+    <no-tasks
+      v-if="!Object.keys(tasksTodo).length"
+    />
     <tasks-todo
-      v-if="Object.keys(tasksTodo).length"
+      v-else
       :tasks="tasksTodo"
     >
       <template #banner>
@@ -48,6 +51,7 @@ export default {
     AddTask: () => import('../components/Modals/AddTask.vue'),
     TasksTodo: () => import('../components/Tasks/TasksTodo.vue'),
     ListHeader: () => import('../components/Shared/ListHeader.vue'),
+    NoTasks: () => import('../components/Tasks/NoTasks.vue'),
   },
   data() {
     return {
@@ -56,6 +60,11 @@ export default {
   },
   computed: {
     ...mapGetters('tasks', ['tasksTodo', 'tasksCompleted']),
+  },
+  mounted() {
+    this.$root.$on('showAddTask', () => {
+      this.showAddTask = true;
+    });
   },
 };
 </script>
