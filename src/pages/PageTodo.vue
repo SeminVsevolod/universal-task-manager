@@ -1,6 +1,9 @@
 <template>
   <q-page class="q-pa-md">
-    <search class="row q-mb-lg" />
+    <div class="row q-mb-lg">
+      <search class="col" />
+      <sort class="col q-ml-sm" />
+    </div>
 
     <p v-if="search && !Object.keys(tasksTodo).length && !Object.keys(tasksCompleted).length">
       No search results
@@ -60,6 +63,7 @@ export default {
     NoTasks: () => import('../components/Tasks/NoTasks.vue'),
     ListHeader: () => import('../components/Shared/ListHeader.vue'),
     Search: () => import('../components/Shared/Search.vue'),
+    Sort: () => import('../components/Shared/Sort.vue'),
   },
   data() {
     return {

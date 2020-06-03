@@ -39,6 +39,9 @@ const mutations = {
   setSearch($state, value) {
     $state.search = value;
   },
+  setSortByKey($state, value) {
+    $state.sortByKey = value;
+  },
 };
 
 const actions = {
@@ -58,6 +61,9 @@ const actions = {
   },
   setSearch({ commit }, value) {
     commit('setSearch', value);
+  },
+  setSortByKey({ commit }, value) {
+    commit('setSortByKey', value);
   },
 };
 
