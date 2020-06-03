@@ -9,31 +9,34 @@
       No search results
     </p>
 
-    <no-tasks
-      v-if="!Object.keys(tasksTodo).length && !search"
-    />
+    <div class="relative-position">
+      <no-tasks
+        v-if="!Object.keys(tasksTodo).length && !search"
+      />
 
-    <tasks-todo
-      v-if="Object.keys(tasksTodo).length"
-      :tasks="tasksTodo"
-    >
-      <template #banner>
-        <list-header class="bg-orange-4">
-          Tasks to do
-        </list-header>
-      </template>
-    </tasks-todo>
+      <tasks-todo
+        v-if="Object.keys(tasksTodo).length"
+        :tasks="tasksTodo"
+        leave-active-class="absolute-top"
+      >
+        <template #banner>
+          <list-header class="bg-orange-4">
+            Tasks to do
+          </list-header>
+        </template>
+      </tasks-todo>
 
-    <tasks-todo
-      v-if="Object.keys(tasksCompleted).length"
-      :tasks="tasksCompleted"
-    >
-      <template #banner>
-        <list-header class="bg-green-4">
-          Tasks completed
-        </list-header>
-      </template>
-    </tasks-todo>
+      <tasks-todo
+        v-if="Object.keys(tasksCompleted).length"
+        :tasks="tasksCompleted"
+      >
+        <template #banner>
+          <list-header class="bg-green-4">
+            Tasks completed
+          </list-header>
+        </template>
+      </tasks-todo>
+    </div>
 
     <div class="absolute-bottom text-center q-mb-lg">
       <q-btn
