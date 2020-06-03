@@ -1,17 +1,26 @@
 <template>
   <q-page class="q-pa-md">
-    <q-list
-      v-if="Object.keys(tasks).length"
-      separator
-      bordered
+    <tasks-todo
+      v-if="Object.keys(tasksTodo).length"
+      :tasks="tasksTodo"
     >
-      <task
-        v-for="(task, taskKey) in tasks"
-        :id="taskKey"
-        :key="taskKey"
-        :task="task"
-      />
-    </q-list>
+      <template #banner>
+        <list-header class="bg-orange-4">
+          Tasks to do
+        </list-header>
+      </template>
+    </tasks-todo>
+
+    <tasks-todo
+      v-if="Object.keys(tasksCompleted).length"
+      :tasks="tasksCompleted"
+    >
+      <template #banner>
+        <list-header class="bg-green-4">
+          Tasks completed
+        </list-header>
+      </template>
+    </tasks-todo>
 
     <div class="absolute-bottom text-center q-mb-lg">
       <q-btn
@@ -36,8 +45,9 @@ import { mapGetters } from 'vuex';
 export default {
   name: 'PageTodo',
   components: {
-    Task: () => import('../components/Tasks/Task.vue'),
     AddTask: () => import('../components/Modals/AddTask.vue'),
+    TasksTodo: () => import('../components/Tasks/TasksTodo.vue'),
+    ListHeader: () => import('../components/Shared/ListHeader.vue'),
   },
   data() {
     return {
@@ -45,7 +55,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('tasks', ['tasks']),
+    ...mapGetters('tasks', ['tasksTodo', 'tasksCompleted']),
   },
 };
 </script>
