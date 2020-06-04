@@ -17,10 +17,12 @@
     </q-item-section>
 
     <q-item-section>
+      <!-- eslint-disable -->
       <q-item-label
         :class="{'task-strikethrough': task.completed}"
         v-html="$options.filters.searchHighlight(task.name, search)"
       />
+      <!-- eslint-enable -->
     </q-item-section>
 
     <q-item-section
