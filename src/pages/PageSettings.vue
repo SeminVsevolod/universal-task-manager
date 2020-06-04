@@ -1,5 +1,5 @@
 <template>
-  <q-page class="padding">
+  <q-page padding>
     <q-list
       bordered
       padding

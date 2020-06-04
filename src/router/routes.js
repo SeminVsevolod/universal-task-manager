@@ -12,6 +12,10 @@ const routes = [
         path: '/settings',
         component: () => import('pages/PageSettings.vue'),
       },
+      {
+        path: '/help',
+        component: () => import('pages/PageHelp.vue'),
+      },
     ],
   },
 ];
