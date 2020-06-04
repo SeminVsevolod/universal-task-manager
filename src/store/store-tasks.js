@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { uid } from 'quasar';
 
-const state = {
+const $state = {
   tasks: {
     ID1: {
       name: 'Go to shop',
@@ -26,25 +26,25 @@ const state = {
   sortByKey: 'dueDate',
 };
 
-const mutations = {
-  updateTask($state, payload) {
-    Object.assign($state.tasks[payload.id], payload.updates);
+const $mutations = {
+  updateTask(state, payload) {
+    Object.assign(state.tasks[payload.id], payload.updates);
   },
-  deleteTask($state, payload) {
-    Vue.delete($state.tasks, payload.id);
+  deleteTask(state, payload) {
+    Vue.delete(state.tasks, payload.id);
   },
-  addTask($state, payload) {
-    Vue.set($state.tasks, payload.id, payload.task);
+  addTask(state, payload) {
+    Vue.set(state.tasks, payload.id, payload.task);
   },
-  setSearch($state, value) {
-    $state.search = value;
+  setSearch(state, value) {
+    state.search = value;
   },
-  setSortByKey($state, value) {
-    $state.sortByKey = value;
+  setSortByKey(state, value) {
+    state.sortByKey = value;
   },
 };
 
-const actions = {
+const $actions = {
   updateTask({ commit }, payload) {
     commit('updateTask', payload);
   },
@@ -67,30 +67,30 @@ const actions = {
   },
 };
 
-const getters = {
-  taskSorted: ($state) => {
+const $getters = {
+  taskSorted: (state) => {
     const taskSorted = {};
-    const keysOrdered = Object.keys($state.tasks);
+    const keysOrdered = Object.keys(state.tasks);
     keysOrdered.sort((a, b) => {
-      const taskAProp = state.tasks[a][$state.sortByKey].toLowerCase();
-      const taskBProp = state.tasks[b][$state.sortByKey].toLowerCase();
+      const taskAProp = state.tasks[a][state.sortByKey].toLowerCase();
+      const taskBProp = state.tasks[b][state.sortByKey].toLowerCase();
       if (taskAProp > taskBProp) { return 1; }
       if (taskAProp < taskBProp) { return -1; }
       return 0;
     });
     keysOrdered.forEach((key) => {
-      taskSorted[key] = $state.tasks[key];
+      taskSorted[key] = state.tasks[key];
     });
     return taskSorted;
   },
-  tasksFiltered: ($state, $getters) => {
-    const { taskSorted } = $getters;
+  tasksFiltered: (state, getters) => {
+    const { taskSorted } = getters;
     const tasksFiltered = {};
-    if ($state.search) {
+    if (state.search) {
       Object.keys(taskSorted).forEach((key) => {
         const task = taskSorted[key];
         const taskNameLowerCase = task.name.toLowerCase();
-        const searchLowerCase = $state.search.toLowerCase();
+        const searchLowerCase = state.search.toLowerCase();
         if (taskNameLowerCase.includes(searchLowerCase)) {
           tasksFiltered[key] = task;
         }
@@ -99,8 +99,8 @@ const getters = {
     }
     return taskSorted;
   },
-  tasksTodo: ($state, $getters) => {
-    const { tasksFiltered } = $getters;
+  tasksTodo: (state, getters) => {
+    const { tasksFiltered } = getters;
     const tasks = {};
     Object.keys(tasksFiltered).forEach((key) => {
       const task = tasksFiltered[key];
@@ -110,8 +110,8 @@ const getters = {
     });
     return tasks;
   },
-  tasksCompleted: ($state, $getters) => {
-    const { tasksFiltered } = $getters;
+  tasksCompleted: (state, getters) => {
+    const { tasksFiltered } = getters;
     const tasks = {};
     Object.keys(tasksFiltered).forEach((key) => {
       const task = tasksFiltered[key];
@@ -125,8 +125,8 @@ const getters = {
 
 export default {
   namespaced: true,
-  state,
-  mutations,
-  actions,
-  getters,
+  state: $state,
+  mutations: $mutations,
+  actions: $actions,
+  getters: $getters,
 };

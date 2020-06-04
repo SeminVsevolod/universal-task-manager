@@ -93,7 +93,9 @@ module.exports = function (/* ctx */) {
       ],
 
       // Quasar plugins
-      plugins: [],
+      plugins: [
+        'LocalStorage',
+      ],
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie

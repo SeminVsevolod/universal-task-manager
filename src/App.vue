@@ -5,8 +5,18 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: 'App',
+  mounted() {
+    this.loadSettings();
+  },
+  methods: {
+    ...mapActions('settings', [
+      'loadSettings',
+    ]),
+  },
 };
 </script>
 <style>
