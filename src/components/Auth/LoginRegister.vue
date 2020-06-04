@@ -8,7 +8,7 @@
             color="secondary"
           />
         </template>
-        Register to access your Todos anywhere
+        {{ tab | titleCase }} to access your Todos anywhere
       </q-banner>
     </div>
 
@@ -41,7 +41,7 @@
       <q-btn
         type="submit"
         color="primary"
-        label="Register"
+        :label="tab"
       />
     </div>
   </q-form>
@@ -49,7 +49,21 @@
 
 <script>
 export default {
-  name: 'Register',
+  name: 'LoginRegister',
+  filters: {
+    titleCase(value) {
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    },
+  },
+  props: {
+    tab: {
+      type: String,
+      default: 'login',
+      validator(value) {
+        return ['login', 'register'].includes(value);
+      },
+    },
+  },
   data() {
     return {
       formData: {
@@ -74,7 +88,11 @@ export default {
       return true;
     },
     submitForm() {
-      console.log('submitForm');
+      if (this.tab === 'login') {
+        console.log('login');
+      } else {
+        console.log('register');
+      }
     },
   },
 };
