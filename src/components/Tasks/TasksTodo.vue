@@ -2,9 +2,9 @@
   <transition
     appear
     enter-active-class="animated zoomIn"
-    :leave-active-class="'animated zoomOut ' + leaveActiveClass"
+    :leave-active-class="'animated zoomOut ' + type === 'todo' ? 'absolute-top' : ''"
   >
-    <div class="q-mt-lg">
+    <div :class="{'q-mt-lg': type === 'completed'}">
       <slot name="banner" />
       <q-list
         v-if="Object.keys(tasks).length"
@@ -29,13 +29,16 @@ export default {
     Task: () => import('./Task.vue'),
   },
   props: {
+    type: {
+      type: String,
+      required: true,
+      validator(value) {
+        return ['todo', 'completed'].includes(value);
+      },
+    },
     tasks: {
       type: Object,
       required: true,
-    },
-    leaveActiveClass: {
-      type: String,
-      default: '',
     },
   },
 };

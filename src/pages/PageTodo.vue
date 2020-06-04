@@ -1,52 +1,55 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="row q-mb-lg">
-      <search class="col" />
-      <sort class="col q-ml-sm" />
-    </div>
+  <q-page>
+    <div class="q-pa-md absolute full-width full-height column">
+      <div class="row q-mb-lg">
+        <search class="col" />
+        <sort class="col q-ml-sm" />
+      </div>
 
-    <p v-if="search && !Object.keys(tasksTodo).length && !Object.keys(tasksCompleted).length">
-      No search results
-    </p>
+      <p v-if="search && !Object.keys(tasksTodo).length && !Object.keys(tasksCompleted).length">
+        No search results
+      </p>
 
-    <div class="relative-position">
-      <no-tasks
-        v-if="!Object.keys(tasksTodo).length && !search"
-      />
+      <q-scroll-area class="q-scroll-area-tasks">
+        <no-tasks
+          v-if="!Object.keys(tasksTodo).length && !search"
+        />
 
-      <tasks-todo
-        v-if="Object.keys(tasksTodo).length"
-        :tasks="tasksTodo"
-        leave-active-class="absolute-top"
-      >
-        <template #banner>
-          <list-header class="bg-orange-4">
-            Tasks to do
-          </list-header>
-        </template>
-      </tasks-todo>
+        <tasks-todo
+          v-if="Object.keys(tasksTodo).length"
+          type="todo"
+          :tasks="tasksTodo"
+        >
+          <template #banner>
+            <list-header class="bg-orange-4">
+              Tasks to do
+            </list-header>
+          </template>
+        </tasks-todo>
 
-      <tasks-todo
-        v-if="Object.keys(tasksCompleted).length"
-        :tasks="tasksCompleted"
-      >
-        <template #banner>
-          <list-header class="bg-green-4">
-            Tasks completed
-          </list-header>
-        </template>
-      </tasks-todo>
-    </div>
+        <tasks-todo
+          v-if="Object.keys(tasksCompleted).length"
+          type="completed"
+          :tasks="tasksCompleted"
+        >
+          <template #banner>
+            <list-header class="bg-green-4">
+              Tasks completed
+            </list-header>
+          </template>
+        </tasks-todo>
+      </q-scroll-area>
 
-    <div class="absolute-bottom text-center q-mb-lg">
-      <q-btn
-        round
-        class=""
-        color="primary"
-        size="24px"
-        icon="add"
-        @click="showAddTask = true"
-      />
+      <div class="absolute-bottom text-center q-mb-lg no-pointer-events">
+        <q-btn
+          round
+          class="all-pointer-events"
+          color="primary"
+          size="24px"
+          icon="add"
+          @click="showAddTask = true"
+        />
+      </div>
     </div>
 
     <q-dialog v-model="showAddTask">
@@ -84,3 +87,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+  .q-scroll-area-tasks {
+    display: flex;
+    flex-grow: 1;
+  }
+</style>

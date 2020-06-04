@@ -82,6 +82,7 @@ module.exports = function (/* ctx */) {
         'QForm',
         'QBanner',
         'QSelect',
+        'QScrollArea',
       ],
 
       directives: [
