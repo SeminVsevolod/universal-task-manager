@@ -83,6 +83,7 @@ module.exports = function (/* ctx */) {
         'QBanner',
         'QSelect',
         'QScrollArea',
+        'QToggle',
       ],
 
       directives: [

@@ -4,8 +4,11 @@
     enter-active-class="animated zoomIn"
     :leave-active-class="'animated zoomOut ' + type === 'todo' ? 'absolute-top' : ''"
   >
-    <div :class="{'q-mt-lg': type === 'completed'}">
-      <slot name="banner" />
+    <div :class="{'q-mt-lg': type === 'completed' && !settings.showTasksInOneList}">
+      <slot
+        v-if="!settings.showTasksInOneList"
+        name="banner"
+      />
       <q-list
         v-if="Object.keys(tasks).length"
         separator
@@ -23,6 +26,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'TasksTodo',
   components: {
@@ -40,6 +45,11 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  computed: {
+    ...mapGetters('settings', [
+      'settings',
+    ]),
   },
 };
 </script>
