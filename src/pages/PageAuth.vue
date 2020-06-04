@@ -34,10 +34,7 @@
         </q-tab-panel>
 
         <q-tab-panel name="register">
-          <div class="text-h6">
-            Register
-          </div>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          <register />
         </q-tab-panel>
       </q-tab-panels>
     </q-card>
@@ -46,9 +43,12 @@
 <script>
 export default {
   name: 'PageAuth',
+  components: {
+    Register: () => import('components/Auth/Register'),
+  },
   data() {
     return {
-      tab: 'login',
+      tab: 'register',
     };
   },
 };
