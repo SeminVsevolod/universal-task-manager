@@ -1,5 +1,12 @@
 <template>
   <q-page padding>
+    <q-btn
+      to="/settings"
+      flat
+      color="primary"
+      label="Back"
+      icon="chevron_left"
+    />
     <h5>How to use Universal Task Manager</h5>
     <p>
       Lorem ipsum dolor sit amet, consectetur adipisicing elit.
