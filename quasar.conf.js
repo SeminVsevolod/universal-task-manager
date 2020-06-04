@@ -84,6 +84,9 @@ module.exports = function (/* ctx */) {
         'QSelect',
         'QScrollArea',
         'QToggle',
+        'QTabPanel',
+        'QTabPanels',
+        'QSeparator',
       ],
 
       directives: [
