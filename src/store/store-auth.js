@@ -1,5 +1,6 @@
 import { LocalStorage } from 'quasar';
 import { firebaseAuth } from 'boot/firebase';
+import { showErrorMessage } from 'src/functions/function-show-error-message';
 
 const $state = {
   loggedIn: false,
@@ -20,7 +21,7 @@ const $actions = {
         console.log('response', response);
       })
       .catch((error) => {
-        console.log('error', error);
+        showErrorMessage(error.message);
       });
   },
   loginUser({ commit }, payload) {
@@ -30,14 +31,13 @@ const $actions = {
         console.log('response', response);
       })
       .catch((error) => {
-        console.log('error', error);
+        showErrorMessage(error.message);
       });
   },
   logoutUser() {
     firebaseAuth.signOut();
   },
   handleAuthStateChange({ commit }) {
-    console.log('handleAuthStateChange');
     firebaseAuth.onAuthStateChanged((user) => {
       if (user) {
         commit('setLoggedIn', true);
