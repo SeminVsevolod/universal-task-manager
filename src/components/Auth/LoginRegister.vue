@@ -48,6 +48,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: 'LoginRegister',
   filters: {
@@ -73,6 +75,10 @@ export default {
     };
   },
   methods: {
+    ...mapActions('auth', [
+      'registerUser',
+    ]),
+
     /**
      * Is valid email
      * (source -> see link below, +include upper case until @)
@@ -87,11 +93,12 @@ export default {
       }
       return true;
     },
+
     submitForm() {
       if (this.tab === 'login') {
         console.log('login');
       } else {
-        console.log('register');
+        this.registerUser(this.formData);
       }
     },
   },
