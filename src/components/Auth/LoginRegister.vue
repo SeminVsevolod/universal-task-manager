@@ -77,6 +77,7 @@ export default {
   methods: {
     ...mapActions('auth', [
       'registerUser',
+      'loginUser',
     ]),
 
     /**
@@ -96,7 +97,7 @@ export default {
 
     submitForm() {
       if (this.tab === 'login') {
-        console.log('login');
+        this.loginUser(this.formData);
       } else {
         this.registerUser(this.formData);
       }

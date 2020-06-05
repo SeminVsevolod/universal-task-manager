@@ -16,12 +16,23 @@
         </q-toolbar-title>
 
         <q-btn
+          v-if="!loggedIn"
           to="/auth"
           flat
           class="absolute-right"
           color="secondary"
           icon-right="account_circle"
           label="Login"
+        />
+
+        <q-btn
+          v-else
+          flat
+          class="absolute-right"
+          color="secondary"
+          icon-right="account_circle"
+          label="Logout"
+          @click="logoutUser"
         />
       </q-toolbar>
     </q-header>
@@ -69,6 +80,7 @@
 
 <script>
 import NavLink from 'components/NavLink';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'MainLayout',
@@ -93,6 +105,16 @@ export default {
         },
       ],
     };
+  },
+
+  computed: {
+    ...mapState('auth', [
+      'loggedIn',
+    ]),
+  },
+
+  methods: {
+    ...mapActions('auth', ['logoutUser']),
   },
 };
 </script>

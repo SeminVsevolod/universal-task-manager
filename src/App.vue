@@ -11,10 +11,14 @@ export default {
   name: 'App',
   mounted() {
     this.loadSettings();
+    this.handleAuthStateChange();
   },
   methods: {
     ...mapActions('settings', [
       'loadSettings',
+    ]),
+    ...mapActions('auth', [
+      'handleAuthStateChange',
     ]),
   },
 };
