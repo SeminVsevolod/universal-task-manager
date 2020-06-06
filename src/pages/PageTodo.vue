@@ -106,6 +106,9 @@ export default {
   .q-scroll-area-tasks {
     display: flex;
     flex-grow: 1;
+    .mobile & {
+      flex-basis: 100px;
+    }
   }
   .electron {
     .q-scroll-area-tasks {

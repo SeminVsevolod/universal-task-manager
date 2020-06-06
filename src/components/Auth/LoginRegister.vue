@@ -19,6 +19,7 @@
         lazy-rules
         outlined
         class="col"
+        type="email"
         label="Email"
         stack-label
       />
