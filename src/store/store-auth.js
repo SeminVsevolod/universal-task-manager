@@ -46,7 +46,7 @@ const $actions = {
         this.$router.push('/').catch(() => {});
         dispatch('tasks/fbReadData', null, { root: true });
       } else {
-        commit('tasks/clearTask', null, { root: true });
+        commit('tasks/clearTasks', null, { root: true });
         commit('tasks/setTasksDownloaded', false, { root: true });
         commit('setLoggedIn', false);
         LocalStorage.set('loggedIn', false);
@@ -56,14 +56,9 @@ const $actions = {
   },
 };
 
-const $getters = {
-  settings: (state) => state.settings,
-};
-
 export default {
   namespaced: true,
   state: $state,
   mutations: $mutations,
   actions: $actions,
-  getters: $getters,
 };

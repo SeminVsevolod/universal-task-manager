@@ -41,7 +41,7 @@ const $mutations = {
   addTask(state, payload) {
     Vue.set(state.tasks, payload.id, payload.task);
   },
-  clearTask(state) {
+  clearTasks(state) {
     state.tasks = {};
   },
   setSearch(state, value) {
@@ -111,7 +111,7 @@ const $actions = {
       commit('updateTask', payload);
     });
 
-    // child changed
+    // child deleted
     userTasks.on('child_removed', (snapshot) => {
       const taskId = snapshot.key;
       commit('deleteTask', { id: taskId });
