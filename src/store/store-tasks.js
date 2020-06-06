@@ -1,29 +1,33 @@
 import Vue from 'vue';
 import { uid } from 'quasar';
+import { firebaseDb, firebaseAuth } from 'boot/firebase';
 
 const $state = {
   tasks: {
-    ID1: {
-      name: 'Go to shop',
-      completed: false,
-      dueDate: '2019/05/12',
-      dueTime: '18:30',
-    },
-    ID2: {
-      name: 'Get bananas',
-      completed: false,
-      dueDate: '2019/05/13',
-      dueTime: '14:00',
-    },
-    ID3: {
-      name: 'Get apples',
-      completed: true,
-      dueDate: '2019/05/14',
-      dueTime: '16:00',
-    },
+    // J1J6VGHd5hd2AeknbIPBqtzRet22: {
+    //   ID1: {
+    //     name: 'Go to shop',
+    //     completed: false,
+    //     dueDate: '2019/05/12',
+    //     dueTime: '18:30',
+    //   },
+    //   ID2: {
+    //     name: 'Get bananas',
+    //     completed: false,
+    //     dueDate: '2019/05/13',
+    //     dueTime: '14:00',
+    //   },
+    //   ID3: {
+    //     name: 'Get apples',
+    //     completed: true,
+    //     dueDate: '2019/05/14',
+    //     dueTime: '16:00',
+    //   },
+    // },
   },
   search: '',
   sortByKey: 'dueDate',
+  tasksDownloaded: false,
 };
 
 const $mutations = {
@@ -42,22 +46,28 @@ const $mutations = {
   setSortByKey(state, value) {
     state.sortByKey = value;
   },
+  setTasksDownloaded(state, value) {
+    state.tasksDownloaded = value;
+  },
 };
 
 const $actions = {
-  updateTask({ commit }, payload) {
-    commit('updateTask', payload);
+  updateTask({ dispatch }, payload) {
+    // commit('updateTask', payload);
+    dispatch('fbUpdateTask', payload);
   },
-  deleteTask({ commit }, payload) {
-    commit('deleteTask', payload);
+  deleteTask({ dispatch }, payload) {
+    // commit('deleteTask', payload);
+    dispatch('fbDeleteTask', payload);
   },
-  addTask({ commit }, task) {
+  addTask({ dispatch }, task) {
     const taskId = uid();
     const payload = {
       id: taskId,
       task,
     };
-    commit('addTask', payload);
+    // commit('addTask', payload);
+    dispatch('fbAddTask', payload);
   },
   setSearch({ commit }, value) {
     commit('setSearch', value);
@@ -65,22 +75,77 @@ const $actions = {
   setSortByKey({ commit }, value) {
     commit('setSortByKey', value);
   },
+
+  fbReadData({ commit }) {
+    const userTasks = firebaseDb.ref(`tasks/${firebaseAuth.currentUser.uid}`);
+
+    // initial check for data
+    userTasks.once('value', () => {
+      commit('setTasksDownloaded', true);
+    });
+
+    // child added
+    userTasks.on('child_added', (snapshot) => {
+      const task = snapshot.val();
+      const payload = {
+        id: snapshot.key,
+        task,
+      };
+      commit('addTask', payload);
+    });
+
+    // child changed
+    userTasks.on('child_changed', (snapshot) => {
+      const task = snapshot.val();
+      const payload = {
+        id: snapshot.key,
+        updates: task,
+      };
+      commit('updateTask', payload);
+    });
+
+    // child changed
+    userTasks.on('child_removed', (snapshot) => {
+      const taskId = snapshot.key;
+      commit('deleteTask', { id: taskId });
+    });
+  },
+
+  // eslint-disable-next-line no-empty-pattern
+  fbAddTask({}, payload) {
+    const taskRef = firebaseDb.ref(`tasks/${firebaseAuth.currentUser.uid}/${payload.id}`);
+    taskRef.set(payload.task);
+  },
+
+  // eslint-disable-next-line no-empty-pattern
+  fbUpdateTask({}, payload) {
+    const taskRef = firebaseDb.ref(`tasks/${firebaseAuth.currentUser.uid}/${payload.id}`);
+    taskRef.update(payload.updates);
+  },
+
+  // eslint-disable-next-line no-empty-pattern
+  fbDeleteTask({}, payload) {
+    const taskRef = firebaseDb.ref(`tasks/${firebaseAuth.currentUser.uid}/${payload.id}`);
+    taskRef.remove();
+  },
 };
 
 const $getters = {
   taskSorted: (state) => {
     const taskSorted = {};
     const keysOrdered = Object.keys(state.tasks);
-    keysOrdered.sort((a, b) => {
-      const taskAProp = state.tasks[a][state.sortByKey].toLowerCase();
-      const taskBProp = state.tasks[b][state.sortByKey].toLowerCase();
-      if (taskAProp > taskBProp) { return 1; }
-      if (taskAProp < taskBProp) { return -1; }
-      return 0;
-    });
-    keysOrdered.forEach((key) => {
-      taskSorted[key] = state.tasks[key];
-    });
+    if (Object.keys(state.tasks).length) {
+      keysOrdered.sort((a, b) => {
+        const taskAProp = state.tasks[a] && state.tasks[a][state.sortByKey] ? state.tasks[a][state.sortByKey].toLowerCase() : '';
+        const taskBProp = state.tasks[b] && state.tasks[b][state.sortByKey] ? state.tasks[b][state.sortByKey].toLowerCase() : '';
+        if (taskAProp > taskBProp) { return 1; }
+        if (taskAProp < taskBProp) { return -1; }
+        return 0;
+      });
+      keysOrdered.forEach((key) => {
+        taskSorted[key] = state.tasks[key];
+      });
+    }
     return taskSorted;
   },
   tasksFiltered: (state, getters) => {

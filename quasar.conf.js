@@ -88,6 +88,7 @@ module.exports = function (/* ctx */) {
         'QTabPanel',
         'QTabPanels',
         'QSeparator',
+        'QSpinner',
       ],
 
       directives: [
