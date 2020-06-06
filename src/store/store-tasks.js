@@ -118,19 +118,34 @@ const $actions = {
   // eslint-disable-next-line no-empty-pattern
   fbAddTask({}, payload) {
     const taskRef = firebaseDb.ref(`tasks/${firebaseAuth.currentUser.uid}/${payload.id}`);
-    taskRef.set(payload.task).catch((error) => showErrorMessage(error.message));
+    taskRef.set(payload.task)
+      .catch((error) => {
+        if (error) {
+          showErrorMessage(error.message);
+        }
+      });
   },
 
   // eslint-disable-next-line no-empty-pattern
   fbUpdateTask({}, payload) {
     const taskRef = firebaseDb.ref(`tasks/${firebaseAuth.currentUser.uid}/${payload.id}`);
-    taskRef.update(payload.updates).catch((error) => showErrorMessage(error.message));
+    taskRef.update(payload.updates)
+      .catch((error) => {
+        if (error) {
+          showErrorMessage(error.message);
+        }
+      });
   },
 
   // eslint-disable-next-line no-empty-pattern
   fbDeleteTask({}, payload) {
     const taskRef = firebaseDb.ref(`tasks/${firebaseAuth.currentUser.uid}/${payload.id}`);
-    taskRef.remove().catch((error) => showErrorMessage(error.message));
+    taskRef.remove()
+      .catch((error) => {
+        if (error) {
+          showErrorMessage(error.message);
+        }
+      });
   },
 };
 
