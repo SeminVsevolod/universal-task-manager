@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { uid } from 'quasar';
+import { uid, Notify } from 'quasar';
 import { firebaseDb, firebaseAuth } from 'boot/firebase';
 import { showErrorMessage } from 'src/functions/function-show-error-message';
 
@@ -87,9 +87,7 @@ const $actions = {
     userTasks.once('value', () => {
       commit('setTasksDownloaded', true);
     }, (error) => {
-      if (error) {
-        showErrorMessage(error.message);
-      }
+      showErrorMessage(error && error.message ? error.message : 'Error: tasks cannot be shown');
       this.$router.replace('/auth');
     });
 
@@ -124,10 +122,11 @@ const $actions = {
   fbAddTask({}, payload) {
     const taskRef = firebaseDb.ref(`tasks/${firebaseAuth.currentUser.uid}/${payload.id}`);
     taskRef.set(payload.task)
+      .then(() => {
+        Notify.create({ message: 'Task added' });
+      })
       .catch((error) => {
-        if (error) {
-          showErrorMessage(error.message);
-        }
+        showErrorMessage(error && error.message ? error.message : 'Error: task cannot be added');
       });
   },
 
@@ -135,10 +134,14 @@ const $actions = {
   fbUpdateTask({}, payload) {
     const taskRef = firebaseDb.ref(`tasks/${firebaseAuth.currentUser.uid}/${payload.id}`);
     taskRef.update(payload.updates)
-      .catch((error) => {
-        if (error) {
-          showErrorMessage(error.message);
+      .then(() => {
+        const keys = Object.keys(payload.updates);
+        if (!(keys.includes('completed') && keys.length === 1)) {
+          Notify.create({ message: 'Task updated' });
         }
+      })
+      .catch((error) => {
+        showErrorMessage(error && error.message ? error.message : 'Error: task cannot be updated');
       });
   },
 
@@ -146,10 +149,11 @@ const $actions = {
   fbDeleteTask({}, payload) {
     const taskRef = firebaseDb.ref(`tasks/${firebaseAuth.currentUser.uid}/${payload.id}`);
     taskRef.remove()
+      .then(() => {
+        Notify.create({ message: 'Task deleted' });
+      })
       .catch((error) => {
-        if (error) {
-          showErrorMessage(error.message);
-        }
+        showErrorMessage(error && error.message ? error.message : 'Error: task cannot be deleted');
       });
   },
 };
