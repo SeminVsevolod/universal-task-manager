@@ -69,8 +69,49 @@
           class="text-grey-4"
           v-bind="link"
         />
+
+        <q-item
+          v-if="$q.platform.is.electron"
+          class="text-gray-4 absolute-bottom"
+          clickable
+          @click="showConfirmToQuit = true"
+        >
+          <q-item-section avatar>
+            <q-icon name="power_settings_new" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Quit</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
+
+    <q-dialog
+      v-model="showConfirmToQuit"
+      persistent
+    >
+      <q-card style="width: 300px">
+        <q-card-section class="row items-center">
+          <span class="q-ml-sm">Really quit Universal Task Manager?</span>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn
+            v-close-popup
+            flat
+            label="Cancel"
+            color="primary"
+          />
+          <q-btn
+            v-close-popup
+            flat
+            label="Quit"
+            color="red"
+            @click="quitApp"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
 
     <q-page-container>
       <router-view />
@@ -81,6 +122,7 @@
 <script>
 import NavLink from 'components/NavLink';
 import { mapState, mapActions } from 'vuex';
+import electron from 'electron';
 
 export default {
   name: 'MainLayout',
@@ -92,6 +134,7 @@ export default {
   data() {
     return {
       leftDrawerOpen: false,
+      showConfirmToQuit: false,
       essentialLinks: [
         {
           title: 'Todo',
@@ -115,6 +158,11 @@ export default {
 
   methods: {
     ...mapActions('auth', ['logoutUser']),
+    quitApp() {
+      if (this.$q.platform.is.electron) {
+        electron.ipcRenderer.send('quit-app');
+      }
+    },
   },
 };
 </script>

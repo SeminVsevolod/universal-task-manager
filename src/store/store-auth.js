@@ -9,27 +9,22 @@ const $state = {
 const $mutations = {
   setLoggedIn(state, value) {
     state.loggedIn = value;
-    console.log('setLoggedIn->', state.loggedIn);
   },
 };
 
 const $actions = {
-  registerUser({ commit }, payload) {
+  // eslint-disable-next-line no-empty-pattern
+  registerUser({ }, payload) {
     Loading.show();
     firebaseAuth.createUserWithEmailAndPassword(payload.email, payload.password)
-      .then((response) => {
-        console.log('response', response, commit);
-      })
       .catch((error) => {
         showErrorMessage(error.message);
       });
   },
-  loginUser({ commit }, payload) {
+  // eslint-disable-next-line no-empty-pattern
+  loginUser({ }, payload) {
     Loading.show();
     firebaseAuth.signInWithEmailAndPassword(payload.email, payload.password)
-      .then((response) => {
-        console.log('response', response, commit);
-      })
       .catch((error) => {
         showErrorMessage(error.message);
       });
