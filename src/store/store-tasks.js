@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import { uid } from 'quasar';
 import { firebaseDb, firebaseAuth } from 'boot/firebase';
+import { showErrorMessage } from 'src/functions/function-show-error-message';
 
 const $state = {
   tasks: {
@@ -85,7 +86,7 @@ const $actions = {
     // initial check for data
     userTasks.once('value', () => {
       commit('setTasksDownloaded', true);
-    });
+    }, (error) => showErrorMessage(error.message));
 
     // child added
     userTasks.on('child_added', (snapshot) => {
@@ -117,19 +118,19 @@ const $actions = {
   // eslint-disable-next-line no-empty-pattern
   fbAddTask({}, payload) {
     const taskRef = firebaseDb.ref(`tasks/${firebaseAuth.currentUser.uid}/${payload.id}`);
-    taskRef.set(payload.task);
+    taskRef.set(payload.task).catch((error) => showErrorMessage(error.message));
   },
 
   // eslint-disable-next-line no-empty-pattern
   fbUpdateTask({}, payload) {
     const taskRef = firebaseDb.ref(`tasks/${firebaseAuth.currentUser.uid}/${payload.id}`);
-    taskRef.update(payload.updates);
+    taskRef.update(payload.updates).catch((error) => showErrorMessage(error.message));
   },
 
   // eslint-disable-next-line no-empty-pattern
   fbDeleteTask({}, payload) {
     const taskRef = firebaseDb.ref(`tasks/${firebaseAuth.currentUser.uid}/${payload.id}`);
-    taskRef.remove();
+    taskRef.remove().catch((error) => showErrorMessage(error.message));
   },
 };
 
